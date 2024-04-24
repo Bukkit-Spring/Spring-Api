@@ -1,7 +1,5 @@
 ## Bukkit-Spring
 
----
-
 Bukkit-Spring 将 Spring Boot 生态与 Bukkit 进行了兼容 (目前支持 1.12.2 版本)
 
 ### 目前已整合的三方框架
