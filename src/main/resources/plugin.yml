@@ -1,0 +1,5 @@
+name: Spring-Api
+main: com.ning.spring.Main
+version: 1.0.0
+author: Er_mu
+load: STARTUP
