@@ -1,6 +1,7 @@
 package com.ning.spring;
 
 import com.ning.spring.classloader.RySpringClassLoader;
+import com.ning.spring.ioc.Store;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import org.apache.ibatis.mapping.Environment;
@@ -34,6 +35,7 @@ public class Main extends JavaPlugin {
 
     private ApplicationContext applicationContext;
 
+    private Store store;
 
     @Override
     public void onEnable() {
@@ -42,6 +44,8 @@ public class Main extends JavaPlugin {
         loader = (RySpringClassLoader) enhancer.create(new Class[]{List.class}, new Object[]{getAllPluginLoader(Main.class.getClassLoader())});
         resourceLoader = new DefaultResourceLoader(loader);
         applicationContext = SpringLoader.init(resourceLoader);
+        store = new Store(this);
+        store.build();
     }
 
     public static Main getInstance() {
