@@ -1,0 +1,56 @@
+mybatis-plus:
+  global-config:
+    banner: false
+    db-config:
+      id-type: assign_id
+      table-underline: true
+  mapper-locations: classpath*:com/ning/**/xml/*Mapper.xml,classpath*:aosuo/ning/**/xml/*Mapper.xml
+pagehelper:
+  helper-dialect: mysql
+  reasonable: true
+spring:
+  datasource:
+    default:
+      driver-class-name: com.mysql.jdbc.Driver
+      hikari:
+        auto-commit: true
+        connection-test-query: SELECT 1
+        connection-timeout: 30000
+        idle-timeout: 600000
+        max-lifetime: 1800000
+        maximum-pool-size: 80
+        minimum-idle: 20
+        pool-name: DataSourceHikariCP1
+        register-mbeans: true
+      jdbc-url: jdbc:mysql://..........:3306/rpg?useUnicode=true&useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&useSSL=false&autoReconnect=true&failOverReadOnly=false
+      password: ''
+      type: com.zaxxer.hikari.HikariDataSource
+      username: root
+    playerdata:
+      driver-class-name: com.mysql.jdbc.Driver
+      hikari:
+        auto-commit: true
+        connection-test-query: SELECT 1
+        connection-timeout: 30000
+        idle-timeout: 600000
+        max-lifetime: 1800000
+        maximum-pool-size: 80
+        minimum-idle: 20
+        pool-name: DataSourceHikariCP2
+        register-mbeans: true
+      jdbc-url: jdbc:mysql://.........:3306/player_data?useUnicode=true&useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&useSSL=false&autoReconnect=true&failOverReadOnly=false
+      password: ''
+      type: com.zaxxer.hikari.HikariDataSource
+      username: root
+  redis:
+    database: 15
+    host: 127.0.0.1
+    lettuce:
+      pool:
+        max-active: 200
+        max-idle: 80
+        max-wait: 30000ms
+        min-idle: 50
+    password: ''
+    port: 6379
+    timeout: 5000ms
