@@ -3,6 +3,7 @@ package com.ning.spring;
 import com.baomidou.mybatisplus.autoconfigure.MybatisPlusProperties;
 import lombok.SneakyThrows;
 import org.apache.commons.io.IOUtils;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
@@ -24,31 +25,18 @@ import java.util.Properties;
  */
 @EnableCaching
 @EnableAspectJAutoProxy(exposeProxy = true)
-@SpringBootApplication(scanBasePackages = {"com.ning", "aosuo.ning"})
+@SpringBootApplication(scanBasePackages = {"com.ning", "aosuo.ning","top.maplex"})
 public class SpringLoader {
+
     @SneakyThrows
     public static ApplicationContext init(DefaultResourceLoader defaultResourceLoader) {
         //切换配置文件
-        InputStream config = SpringLoader.class.getClassLoader().getResourceAsStream("default");
-        if (config == null) {
-            throw new IllegalStateException("插件配置文件异常");
-        }
-        File applicationProperties = new File(Main.getInstance().getDataFolder(), "application.properties");
-        if (!applicationProperties.exists()) {
-            applicationProperties.getParentFile().mkdirs();
-            //拷贝
-            try (BufferedReader reader = new BufferedReader(new InputStreamReader(config, StandardCharsets.UTF_8));
-                 BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(Files.newOutputStream(applicationProperties.toPath()), StandardCharsets.UTF_8))) {
-                IOUtils.copy(reader, writer);
-            } catch (Exception e) {
-                throw new IllegalStateException(e);
-            }
-        }
+        Main.getInstance().saveResource("spring.yml", false);
+        File file = new File(Main.getInstance().getDataFolder(), "spring.yml");
+        YamlConfiguration config = YamlConfiguration.loadConfiguration(file);
         Properties properties = new Properties();
-        try(BufferedReader br = new BufferedReader(new InputStreamReader(Files.newInputStream(applicationProperties.toPath()), StandardCharsets.UTF_8))){
-            properties.load(br);
-        }catch (Exception e){
-            throw new IllegalStateException(e);
+        for (String key : config.getKeys(true)) {
+            properties.setProperty(key, config.get(key).toString());
         }
         SpringApplication springApplication = new SpringApplication(defaultResourceLoader, SpringLoader.class);
         springApplication.setDefaultProperties(properties);
