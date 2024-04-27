@@ -3,19 +3,14 @@ package com.ning.spring;
 import com.ning.spring.classloader.RySpringClassLoader;
 import lombok.Getter;
 import lombok.SneakyThrows;
-import org.apache.ibatis.mapping.Environment;
-import org.apache.ibatis.session.SqlSession;
-import org.apache.ibatis.session.SqlSessionFactory;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.springframework.cglib.proxy.Enhancer;
 import org.springframework.cglib.proxy.MethodInterceptor;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.io.DefaultResourceLoader;
 
-import javax.sql.DataSource;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.sql.SQLException;
 import java.util.List;
 
 
