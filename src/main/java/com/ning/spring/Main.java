@@ -3,7 +3,11 @@ package com.ning.spring;
 import com.ning.spring.classloader.RySpringClassLoader;
 import lombok.Getter;
 import lombok.SneakyThrows;
+import org.bukkit.Bukkit;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cglib.proxy.Enhancer;
 import org.springframework.cglib.proxy.MethodInterceptor;
 import org.springframework.context.ApplicationContext;
@@ -11,7 +15,9 @@ import org.springframework.core.io.DefaultResourceLoader;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
@@ -34,7 +40,7 @@ public class Main extends JavaPlugin {
     public void onEnable() {
         instance = this;
         Enhancer enhancer = getEnhancer();
-        loader = (RySpringClassLoader) enhancer.create(new Class[]{List.class}, new Object[]{getAllPluginLoader(Main.class.getClassLoader())});
+        loader = (RySpringClassLoader) enhancer.create(new Class[]{List.class}, new Object[]{getAllPluginLoader()});
         resourceLoader = new DefaultResourceLoader(loader);
         applicationContext = SpringLoader.init(resourceLoader);
     }
@@ -51,16 +57,23 @@ public class Main extends JavaPlugin {
         return resourceLoader;
     }
 
-    @SneakyThrows
-    private static List<ClassLoader> getAllPluginLoader(ClassLoader currentPluginClassLoader) {
-        Field loaderField = currentPluginClassLoader.getClass().getDeclaredField("loader");
-        loaderField.setAccessible(true);
-        Object loader = loaderField.get(currentPluginClassLoader);
 
-        Class<?> loaderClass = loader.getClass();
-        Field loadersField = loaderClass.getDeclaredField("loaders");
-        loadersField.setAccessible(true);
-        return (List<ClassLoader>) loadersField.get(loader);
+    @SneakyThrows
+    private static List<ClassLoader> getAllPluginLoader() {
+        List<String> arrays = Arrays.asList(SpringLoader.class.getAnnotation(SpringBootApplication.class).scanBasePackages());
+        return Arrays.stream(Bukkit.getPluginManager().getPlugins())
+                .filter(item -> isInPackage(arrays, item.getDescription().getMain()))
+                .map(item -> item.getClass().getClassLoader())
+                .collect(Collectors.toList());
+    }
+
+    private static Boolean isInPackage(List<String> springScanPackages, String mainClass) {
+        for (String springScanPackage : springScanPackages) {
+            if (mainClass.startsWith(springScanPackage)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private static Enhancer getEnhancer() {

@@ -70,7 +70,7 @@ public class RySpringClassLoader extends URLClassLoader {
     @Override
     public Enumeration<URL> getResources(String name) throws IOException {
         List<Enumeration<URL>> list = new ArrayList<>();
-        boolean isScanPackage = "com/ning/".equalsIgnoreCase(name) || "aosuo/ning/".equalsIgnoreCase(name);
+        boolean isScanPackage = "com/ning/".equalsIgnoreCase(name) || "aosuo/ning/".equalsIgnoreCase(name) || "cc/canyi/".equalsIgnoreCase(name);
 
         //先查当前插件
         Enumeration<URL> enumeration = currentLoader.getResources(name);

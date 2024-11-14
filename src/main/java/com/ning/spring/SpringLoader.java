@@ -25,7 +25,7 @@ import java.util.Properties;
  */
 @EnableCaching
 @EnableAspectJAutoProxy(exposeProxy = true)
-@SpringBootApplication(scanBasePackages = {"com.ning", "aosuo.ning","top.maplex"})
+@SpringBootApplication(scanBasePackages = {"com.ning", "aosuo.ning","top.maplex", "cc.canyi"})
 public class SpringLoader {
 
     @SneakyThrows
