@@ -35,7 +35,7 @@ import java.util.stream.Stream;
  * @date 2022/5/4 17:39
  */
 @Configuration
-@MapperScan(value = {"com.ning.**.mapper*", "aosuo.ning.**.mapper*"})
+@MapperScan(value = {"com.ning.**.mapper*", "aosuo.ning.**.mapper*", "cc.canyi.**.mapper*"})
 public class MybatisPlusConfiguration {
     @Resource
     private Environment env;
@@ -123,6 +123,7 @@ public class MybatisPlusConfiguration {
             List<String> mappers = new ArrayList<>();
             mappers.add("classpath*:com/ning/**/xml/*Mapper.xml");
             mappers.add("classpath*:aosuo/ning/**/xml/*Mapper.xml");
+            mappers.add("classpath*:cc/canyi/**/xml/*Mapper.xml");
             sqlSessionFactoryBean.setMapperLocations(mappers.stream().flatMap(location -> {
                 try {
                     return Stream.of(resolver.getResources(location));
